@@ -17,12 +17,12 @@ See https://docs.python.org/3/library/pickle.html#pickle-picklable about picklab
 
 Usage:
 
-1.) Edit the values below so that this function can ssh / scp into your cluster of choice.
+1.) Edit the values at the top of sbatch.py so that this function can ssh / scp into your cluster of choice.
 
 2.) place this file in the same folder as the main program and import it with "import sbatch".
 
 3.) in whatever file holds your functions, call sbatch.load("function_name", [list, of, arguments]).
 
-4.) when you've finished loading up function calls and you want to send them all out, call sbatch.load().
+4.) when you've finished loading up function calls and you want to send them all out, call sbatch.launch().
 
 5.) drink a smoothie, if you want to!
