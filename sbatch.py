@@ -33,11 +33,10 @@ _archive_directory = "/local/path/autopy_archive" # for things that have been se
 _ssh_username = "cluster_username" # cluster username
 _ssh_key = "/path/to_shh_key" # cluster ssh key 
 _host = "della5.princeton.edu" # cluster hostname
-_workdir = "/tigress/cluster_username/" # where we should make a copy of _sbatch_file_directory
+_workdir = "/tigress/cluster_username/" # where on the cluster we should make a copy of _sbatch_file_directory
 _path_to_python3 = "intel-python/3.5/20150803_185146" # python3 path on the cluster (for "module load _path_to_python3")
 _mail = "email@princeton.edu" # email for SLURM messages
 _mail_type = "end,fail" # when to email
-
 
 _active_batches = [] # will be populated by load() and emptied by launch()
 
@@ -122,13 +121,14 @@ def load(function_name, list_of_params = [], ssh_username = _ssh_username,
     max_bytes = 2**31 - 1
     for i in range(len(list_of_params)):
         bytes_out = pickle.dumps(list_of_params[i])
-        with open(tf_names[i+2], 'wb') as f_out:
+        with open(os.path.join(local, tf_names[i+2]), 'wb') as f_out:
             for idx in range(0, n_bytes, max_bytes):
                 f_out.write(bytes_out[idx:idx+max_bytes])
 
     #generate sbatch file
     sb = "\n#SBATCH "
     pars = ["-N " + str(n),
+            "-c " + str(c),
             "-t " + str(t),
             "--workdir=" + os.path.join(workdir, _sbatch_file_directory.split("/")[-1]),
             "--mail-user=" + mail,
@@ -177,4 +177,5 @@ def l(file_path):
     f.close()
 
     _active_batches.append(tf_names[0]) # ready to be sent + sbatched by launch()!
+
     
